@@ -1,1 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FF Diamond Top-Up Hub</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { max-width: 600px; width: 100%; background: #1e293b; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: #f97316; margin-bottom: 5px; }
+        .sub { text-align: center; font-size: 14px; color: #94a3b8; margin-bottom: 25px; }
+        .payment-info { background: #334155; padding: 15px; border-radius: 8px; border-left: 5px solid #f97316; margin-bottom: 20px; }
+        .payment-info h3 { margin-bottom: 5px; color: #38bdf8; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #cbd5e1; }
+        input[type="text"] { width: 100%; padding: 12px; border: 1px solid #475569; background: #0f172a; color: white; border-radius: 6px; font-size: 16px; }
+        .packages { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .package-card { background: #334155; border: 2px solid transparent; padding: 15px; border-radius: 8px; text-align: center; cursor: pointer; transition: 0.2s; }
+        .package-card:hover { border-color: #64748b; }
+        .package-card.selected { border-color: #f97316; background: #475569; }
+        .diamonds { font-size: 18px; font-weight: bold; color: #38bdf8; display: block; }
+        .price { font-size: 14px; color: #cbd5e1; }
+        .btn { width: 100%; background: #f97316; color: white; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+        .btn:hover { background: #ea580c; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>FF Diamond Station</h1>
+    <p class="sub">Fast, secure manual top-ups using Player UID</p>
+
+    <!-- Payment Wallet Details -->
+    <div class="payment-info">
+        <h3>💸 Step 1: Send Payment First</h3>
+        <p><strong>Easypaisa / JazzCash:</strong> 0336-7770888</p>
+        <p><strong>Account Title:</strong> FF TOPUP</p>
+        <p style="font-size: 12px; margin-top: 5px; color: #cbd5e1;">Copy the Transaction ID or keep a screenshot after sending money.</p>
+    </div>
+
+    <!-- Order Processing Form -->
+    <div class="form-group">
+        <label for="uid">🎮 Enter Free Fire Player UID:</label>
+        <input type="text" id="uid" placeholder="e.g., 123456789" required>
+    </div>
+
+    <div class="form-group">
+        <label>💎 Select Diamond Package:</label>
+        <div class="packages">
+            <div class="package-card" onclick="selectPackage(this, '70 Diamonds', 'Rs. 150')">
+                <span class="diamonds">💎 70 Diamonds</span>
+                <span class="price">Rs. 150</span>
+            </div>
+            <div class="package-card" onclick="selectPackage(this, '355 Diamonds', 'Rs. 600')">
+                <span class="diamonds">💎 355 Diamonds</span>
+                <span class="price">Rs. 600</span>
+            </div>
+            <div class="package-card" onclick="selectPackage(this, '713 Diamonds', 'Rs. 1200')">
+                <span class="diamonds">💎 713 Diamonds</span>
+                <span class="price">Rs. 1,200</span>
+            </div>
+            <div class="package-card" onclick="selectPackage(this, '1426 Diamonds', 'Rs. 2500')">
+                <span class="diamonds">💎 1426 Diamonds</span>
+                <span class="price">Rs. 2,500</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="txid">🧾 Payment Transaction ID (TxID):</label>
+        <input type="text" id="txid" placeholder="e.g., 50012345678" required>
+    </div>
+
+    <button class="btn" onclick="submitToWhatsApp()">Proceed to Submit via WhatsApp</button>
+</div>
+
+<script>
+    let selectedPackageName = "";
+    let selectedPackagePrice = "";
+
+    function selectPackage(element, name, price) {
+        document.querySelectorAll('.package-card').forEach(card => card.classList.remove('selected'));
+        element.classList.add('selected');
+        selectedPackageName = name;
+        selectedPackagePrice = price;
+    }
+
+    function submitToWhatsApp() {
+        const uid = document.getElementById('uid').value.trim();
+        const txid = document.getElementById('txid').value.trim();
+        
+        // REPLACE WITH YOUR ACTUAL WHATSAPP NUMBER (Include country code, no + or spaces)
+        const myWhatsAppNumber = "923367770888"; 
+
+        if (!uid) { alert("Please enter your Player UID!"); return; }
+        if (!selectedPackageName) { alert("Please select a Diamond package!"); return; }
+        if (!txid) { alert("Please enter your Payment Transaction ID!"); return; }
+
+        // Format message parameters nicely
+        const textMessage = `👋 *NEW TOP-UP ORDER* \n\n` + 
+                            `🎮 *Player UID:* ${uid}\n` +
+                            `💎 *Package:* ${selectedPackageName}\n` +
+                            `💰 *Price:* ${selectedPackagePrice}\n` +
+                            `🧾 *TxID:* ${txid}\n\n` +
+                            `Please verify payment and load diamonds. Thanks!`;
+
+        const encodedMessage = encodeURIComponent(textMessage);
+        const whatsappUrl = `https://wa.me{myWhatsAppNumber}?text=${encodedMessage}`;
+        
+        window.open(whatsappUrl, '_blank');
+    }
+</script>
+
+</body>
+</html>
 
